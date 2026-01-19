@@ -8,8 +8,9 @@ import Article from "components/Article"
 import { siteUrl } from "../../blog-config"
 
 const Post = ({ data }) => {
+  if (!data?.markdownRemark) return null
   const post = data.markdownRemark
-  const { previous, next, seriesList } = data
+  const { seriesList, relatedPosts, recentPosts } = data
 
   const { title, date, update, tags, series } = post.frontmatter
   const { excerpt } = post
@@ -32,6 +33,11 @@ const Post = ({ data }) => {
     })
   }
 
+  const relatedList = relatedPosts.nodes.filter(node => node.id !== post.id)
+  const fallbackList = recentPosts.nodes.filter(node => node.id !== post.id)
+  const postList = relatedList.length > 0 ? relatedList : fallbackList
+  const listTitle = relatedList.length > 0 ? "같은 태그 글" : "최근 글"
+
   return (
     <Layout>
       <SEO title={title} description={excerpt} url={`${siteUrl}${slug}`} />
@@ -47,7 +53,10 @@ const Post = ({ data }) => {
           <Article.Series header={series} series={filteredSeries} />
         )}
         <Article.Body html={post.html} />
-        <Article.Footer previous={previous} next={next} />
+        <Article.Footer
+          postList={postList}
+          listTitle={listTitle}
+        />
       </Article>
     </Layout>
   )
@@ -59,8 +68,7 @@ export const pageQuery = graphql`
   query BlogPostBySlug(
     $id: String!
     $series: String
-    $previousPostId: String
-    $nextPostId: String
+    $tags: [String!]!
   ) {
     site {
       siteMetadata {
@@ -101,20 +109,37 @@ export const pageQuery = graphql`
         }
       }
     }
-    previous: markdownRemark(id: { eq: $previousPostId }) {
-      fields {
-        slug
-      }
-      frontmatter {
-        title
+    relatedPosts: allMarkdownRemark(
+      sort: { fields: [frontmatter___date], order: DESC }
+      filter: { frontmatter: { tags: { in: $tags } } }
+      limit: 20
+    ) {
+      nodes {
+        id
+        html
+        fields {
+          slug
+        }
+        frontmatter {
+          title
+          date(formatString: "MMMM DD, YYYY")
+        }
       }
     }
-    next: markdownRemark(id: { eq: $nextPostId }) {
-      fields {
-        slug
-      }
-      frontmatter {
-        title
+    recentPosts: allMarkdownRemark(
+      sort: { fields: [frontmatter___date], order: DESC }
+      limit: 20
+    ) {
+      nodes {
+        id
+        html
+        fields {
+          slug
+        }
+        frontmatter {
+          title
+          date(formatString: "MMMM DD, YYYY")
+        }
       }
     }
   }

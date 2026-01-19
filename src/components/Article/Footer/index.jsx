@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react"
-import { navigate } from "gatsby"
+import React, { useEffect, useMemo, useState } from "react"
+import { Link } from "gatsby"
 import { useSelector } from "react-redux"
 import styled, { useTheme } from "styled-components"
-import { BiLeftArrowAlt, BiRightArrowAlt } from "react-icons/bi"
 import { Utterances } from "utterances-react-component"
 
 import { utterances } from "../../../../blog-config"
@@ -12,98 +11,110 @@ import MDSpinner from "react-md-spinner"
 import Divider from "components/Divider"
 import Bio from "components/Bio"
 
-const ArticleButtonContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 48px;
-  font-size: 19px;
-  
-  @media (max-width: 860px) {
-    margin-bottom: 80px;
-    padding: 0 12.8px;
-    flex-direction: column;
+const PostListSection = styled.section`
+  margin-bottom: 56px;
+  padding: 0 8px;
 
-    & > div:first-child {
-      margin-bottom: 12.8px;
-    }
+  @media (max-width: 860px) {
+    padding: 0 12px;
   }
 `
 
-const ArrowFlexWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  white-space: nowrap;
+const PostListHeader = styled.h3`
+  margin-bottom: 20px;
+  font-size: 16px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: ${props => props.theme.colors.secondaryText};
 `
 
-const ArticleButtonTextWrapper = styled.div`
-  display: flex;
-  align-items: flex-end;
-  flex-direction: column;
-  overflow: hidden;
-`
-
-const Arrow = styled.div`
-  position: relative;
-  left: 0;
-  display: flex;
-  align-items: center;
-  font-size: 24px;
-  flex-basis: 24px;
-  transition: left 0.3s;
-`
-
-const ArticleButtonWrapper = styled.div`
+const PostList = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: ${props => (props.right ? "flex-end" : "flex-start")};
-  padding: 20.8px 16px;
-  max-width: 250px;
-  flex-basis: 250px;
-  font-size: 17.6px;
-  border-radius: 5px;
-  background-color: ${props => props.theme.colors.nextPostButtonBackground};
-  color: ${props => props.theme.colors.text};
-  cursor: pointer;
-  transition: background-color 0.3s;
+  gap: 0;
+`
+
+const PostItem = styled(Link)`
+  display: grid;
+  grid-template-columns: 1fr 84px;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 0;
+  text-decoration: none;
+  color: inherit;
+  border-bottom: 1px solid ${props => props.theme.colors.divider};
+  transition: transform 0.2s;
 
   &:hover {
-    background-color: ${props =>
-      props.theme.colors.hoveredNextPostButtonBackground};
-  }
-
-  & ${ArrowFlexWrapper} {
-    flex-direction: ${props => (props.right ? "row-reverse" : "row")};
-  }
-
-  & ${ArticleButtonTextWrapper} {
-    align-items: ${props => (props.right ? "flex-end" : "flex-start")};
-  }
-
-  & ${Arrow} {
-    ${props => (props.right ? "margin-left: 16px" : "margin-right: 16px")};
-  }
-
-  &:hover ${Arrow} {
-    left: ${props => (props.right ? 2 : -2)}px;
+    transform: translateX(4px);
   }
 
   @media (max-width: 860px) {
-    max-width: inherit;
-    flex-basis: inherit;
+    grid-template-columns: 1fr 72px;
   }
 `
 
-const ArticleButtonLabel = styled.div`
-  margin-bottom: 9.6px;
-  font-size: 12.8px;
+const PostTitle = styled.div`
+  font-size: 17px;
+  font-weight: 600;
+  color: ${props => props.theme.colors.text};
+  line-height: 1.4;
 `
 
-const ArticleButtonTitle = styled.div`
-  padding: 2px 0;
-  width: 100%;
-  text-overflow: ellipsis;
-  overflow: hidden;
+const PostMeta = styled.div`
+  margin-top: 6px;
+  font-size: 12.8px;
+  color: ${props => props.theme.colors.tertiaryText};
+`
+
+const Pagination = styled.div`
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+`
+
+const PageButton = styled.button`
+  min-width: 32px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid ${props => props.theme.colors.heroBorder};
+  background: ${props =>
+    props.active ? props.theme.colors.accent : "transparent"};
+  color: ${props =>
+    props.active ? props.theme.colors.hoveredLinkText : props.theme.colors.text};
+  font-size: 12px;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+
+  &:hover {
+    transform: translateY(-1px);
+    border-color: ${props => props.theme.colors.accent};
+  }
+`
+
+const PostThumb = styled.div`
+  width: 84px;
+  height: 84px;
+  border-radius: 18px;
+  border: 1px solid ${props => props.theme.colors.heroBorder};
+  background-color: ${props => props.theme.colors.background};
+  background-image: ${props => (props.image ? `url(${props.image})` : "none")};
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Playfair Display", "Times New Roman", serif;
+  font-size: 18px;
+  color: ${props => props.theme.colors.accent};
+
+  @media (max-width: 860px) {
+    width: 72px;
+    height: 72px;
+  }
 `
 
 const CommentWrapper = styled.div`
@@ -124,20 +135,10 @@ const HiddenWrapper = styled.div`
   overflow: ${props => (props.isHidden ? "hidden" : "auto")};
 `
 
-const ArticleButton = ({ right, children, onClick }) => {
-  return (
-    <ArticleButtonWrapper right={right} onClick={onClick}>
-      <ArrowFlexWrapper>
-        <Arrow>{right ? <BiRightArrowAlt /> : <BiLeftArrowAlt />}</Arrow>
-        <ArticleButtonTextWrapper>
-          <ArticleButtonLabel>
-            {right ? <>Next Post</> : <>Previous Post</>}
-          </ArticleButtonLabel>
-          <ArticleButtonTitle>{children}</ArticleButtonTitle>
-        </ArticleButtonTextWrapper>
-      </ArrowFlexWrapper>
-    </ArticleButtonWrapper>
-  )
+const extractFirstImage = html => {
+  if (!html) return null
+  const match = html.match(/<img[^>]+src=["']([^"']+)["']/i)
+  return match ? match[1] : null
 }
 
 const Spinner = () => {
@@ -183,23 +184,64 @@ const Comment = () => {
   )
 }
 
-const Footer = ({ previous, next }) => {
+const Footer = ({ postList, listTitle = "같은 태그 글" }) => {
+  const pageSize = 5
+  const [page, setPage] = useState(1)
+  const totalPages = useMemo(
+    () => Math.max(1, Math.ceil((postList?.length || 0) / pageSize)),
+    [postList?.length]
+  )
+
+  useEffect(() => {
+    setPage(1)
+  }, [postList?.length])
+
+  const pagedPosts = useMemo(() => {
+    if (!postList || postList.length === 0) return []
+    const start = (page - 1) * pageSize
+    return postList.slice(start, start + pageSize)
+  }, [page, postList])
+
   return (
     <>
-      <ArticleButtonContainer>
-        {previous ? (
-          <ArticleButton onClick={() => navigate(previous?.fields?.slug)}>
-            {previous?.frontmatter?.title}
-          </ArticleButton>
-        ) : (
-          <div></div>
-        )}
-        {next && (
-          <ArticleButton right onClick={() => navigate(next?.fields?.slug)}>
-            {next?.frontmatter?.title}
-          </ArticleButton>
-        )}
-      </ArticleButtonContainer>
+      {postList?.length > 0 && (
+        <PostListSection>
+          <PostListHeader>{listTitle}</PostListHeader>
+          <PostList>
+            {pagedPosts.map(post => {
+              const image = extractFirstImage(post.html)
+              return (
+                <PostItem key={post.id} to={post.fields.slug}>
+                  <div>
+                    <PostTitle>{post.frontmatter.title}</PostTitle>
+                    <PostMeta>{post.frontmatter.date}</PostMeta>
+                  </div>
+                  <PostThumb image={image}>
+                    {!image && post.frontmatter.title?.slice(0, 1)}
+                  </PostThumb>
+                </PostItem>
+              )
+            })}
+          </PostList>
+          {totalPages > 1 && (
+            <Pagination>
+              {Array.from({ length: totalPages }, (_, index) => {
+                const nextPage = index + 1
+                return (
+                  <PageButton
+                    key={`page-${nextPage}`}
+                    type="button"
+                    active={page === nextPage}
+                    onClick={() => setPage(nextPage)}
+                  >
+                    {nextPage}
+                  </PageButton>
+                )
+              })}
+            </Pagination>
+          )}
+        </PostListSection>
+      )}
       <Bio />
       <CommentWrapper>
         <Divider mt="32px" />

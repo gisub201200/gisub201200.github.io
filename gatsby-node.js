@@ -63,6 +63,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
         context: {
           id: post.id,
           series: post.frontmatter.series,
+          tags: post.frontmatter.tags || [],
           previousPostId,
           nextPostId,
         },
