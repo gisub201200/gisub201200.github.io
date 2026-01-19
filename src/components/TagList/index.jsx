@@ -37,6 +37,8 @@ const spaceToDash = text => {
   return text.replace(/\s+/g, "-")
 }
 
+const encodeTag = tag => encodeURIComponent(tag)
+
 const TagList = ({ tagList, count, selected }) => {
   if (!tagList) return null
 
@@ -44,7 +46,10 @@ const TagList = ({ tagList, count, selected }) => {
     return (
       <TagListWrapper>
         {tagList.map((tag, i) => (
-          <Link key={JSON.stringify({ tag, i })} to={`/tags?q=${tag}`}>
+          <Link
+            key={JSON.stringify({ tag, i })}
+            to={`/tags/?q=${encodeTag(tag)}`}
+          >
             <TagLink>{spaceToDash(tag)}</TagLink>
           </Link>
         ))}
@@ -58,7 +63,9 @@ const TagList = ({ tagList, count, selected }) => {
         <Link
           key={JSON.stringify({ tag, i })}
           to={
-            selected === tag.fieldValue ? "/tags" : `/tags?q=${tag.fieldValue}`
+            selected === tag.fieldValue
+              ? "/tags/"
+              : `/tags/?q=${encodeTag(tag.fieldValue)}`
           }
         >
           <TagLink selected={tag.fieldValue === selected}>

@@ -1,12 +1,9 @@
 module.exports = {
-  title: "SOOLAB",
-  description: "RDBMS, NoSQL, 분산 처리에 관심이 많은 백엔드 엔지니어입니다.",
-  author: "Soo",
+  title: "소잉데이",
+  description: "오늘의 룩과 소재 이야기를 기록하는 패션 블로그입니다.",
+  author: "소잉데이",
   siteUrl: "https://px201226.github.io/",
-  links: {
-    github: "https://github.com/px201226",
-    email: "px201226@gmail.com",
-  },
+  links: {},
   utterances: {
     repo: "px201226/px201226.github.io",
     type: "pathname",

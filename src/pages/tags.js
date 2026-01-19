@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react"
+import React, { useMemo } from "react"
 import _ from "lodash"
 import styled from "styled-components"
 import SEO from "components/SEO"
 import filter from "lodash/filter"
 
-import { graphql, navigate } from "gatsby"
+import { graphql } from "gatsby"
 
 import queryString from "query-string"
 
@@ -24,33 +24,20 @@ const TagListWrapper = styled.div`
   }
 `
 
-const TagsPage = ({ data }) => {
+const TagsPage = ({ data, location }) => {
   const tags = _.sortBy(data.allMarkdownRemark.group, ["totalCount"]).reverse()
   const posts = data.allMarkdownRemark.nodes
 
-  const [selected, setSelected] = useState()
-  const [filteredPosts, setFilteredPosts] = useState([])
+  const search = location?.search || ""
+  const selected = useMemo(() => queryString.parse(search)["q"], [search])
+  const filteredPosts = useMemo(() => {
+    if (!selected) return posts
 
-  let query = null
-  if (typeof document !== "undefined") {
-    query = document.location.search
-  }
-
-  useEffect(() => {
-    if (!selected) {
-      setFilteredPosts(posts)
-      return
-    }
-
-    setFilteredPosts(
-      filter(posts, post => post.frontmatter.tags.indexOf(selected) !== -1)
+    return filter(
+      posts,
+      post => post.frontmatter.tags.indexOf(selected) !== -1
     )
-  }, [selected])
-
-  useEffect(() => {
-    const q = queryString.parse(query)["q"]
-    setSelected(q)
-  }, [query])
+  }, [posts, selected])
 
   return (
     <Layout>
@@ -72,13 +59,6 @@ const TagsPage = ({ data }) => {
           count
           tagList={tags}
           selected={selected}
-          onClick={tag => {
-            console.log(tag, selected)
-            if (tag === selected) {
-              navigate("/tags")
-              alert("zz")
-            } else setSelected(tag)
-          }}
         />
       </TagListWrapper>
 
