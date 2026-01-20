@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://px201226.github.io/sitemap-index.xml
-Host: https://px201226.github.io
+Sitemap: https://gisub201200.github.io/sitemap-index.xml
+Host: https://gisub201200.github.io
