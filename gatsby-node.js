@@ -1,4 +1,6 @@
 const { createFilePath } = require(`gatsby-source-filesystem`)
+const fs = require("fs")
+const path = require("path")
 const _ = require("lodash")
 
 exports.createPages = async ({ graphql, actions, reporter }) => {
@@ -101,7 +103,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   }
 }
 
-exports.onCreateNode = ({ node, actions, getNode }) => {
+exports.onCreateNode = ({ node, actions, getNode, reporter }) => {
   const { createNodeField } = actions
 
   if (node.internal.type === `MarkdownRemark`) {
@@ -113,6 +115,43 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
       name: `slug`,
       value: newSlug,
     })
+
+    const thumbnail = node.frontmatter?.thumbnail
+    if (thumbnail && !/^https?:\/\//i.test(thumbnail)) {
+      if (thumbnail.startsWith("/")) {
+        createNodeField({
+          node,
+          name: `thumbnail`,
+          value: thumbnail,
+        })
+        return
+      }
+
+      const absPath = path.resolve(
+        path.dirname(node.fileAbsolutePath),
+        thumbnail
+      )
+      if (!fs.existsSync(absPath)) {
+        reporter?.warn(
+          `[thumbnail] Missing file: ${absPath} (from ${node.fileAbsolutePath})`
+        )
+        return
+      }
+
+      const slugDir = newSlug.replace(/^\/|\/$/g, "")
+      const filename = path.basename(absPath)
+      const staticDir = path.join(process.cwd(), "static", "thumbnails", slugDir)
+      const destPath = path.join(staticDir, filename)
+
+      fs.mkdirSync(staticDir, { recursive: true })
+      fs.copyFileSync(absPath, destPath)
+
+      createNodeField({
+        node,
+        name: `thumbnail`,
+        value: `/thumbnails/${slugDir}/${filename}`,
+      })
+    }
   }
 }
 
@@ -127,6 +166,7 @@ exports.createSchemaCustomization = ({ actions }) => {
     description: String
     tags: [String!]!
     series: String
+    thumbnail: String
   }
   `
   createTypes(typeDefs)

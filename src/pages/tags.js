@@ -85,14 +85,17 @@ export const pageQuery = graphql`
       }
       nodes {
         excerpt(pruneLength: 200, truncate: true)
+        html
         fields {
           slug
+          thumbnail
         }
         frontmatter {
           date(formatString: "MMMM DD, YYYY")
           update(formatString: "MMM DD, YYYY")
           title
           tags
+          thumbnail
         }
       }
     }

@@ -12,9 +12,16 @@ const Post = ({ data }) => {
   const post = data.markdownRemark
   const { seriesList, relatedPosts, recentPosts } = data
 
-  const { title, date, update, tags, series } = post.frontmatter
-  const { excerpt } = post
-  const { readingTime, slug } = post.fields
+  const { title, date, update, tags, series, thumbnail } = post.frontmatter
+  const { excerpt, html } = post
+  const { readingTime, slug, thumbnail: resolvedThumbnail } = post.fields
+  const extractFirstImage = htmlSource => {
+    if (!htmlSource) return null
+    const match = htmlSource.match(/<img[^>]+src=["']([^"']+)["']/i)
+    return match ? match[1] : null
+  }
+  const fallbackThumbnail = extractFirstImage(html)
+  const seoThumbnail = resolvedThumbnail || thumbnail || fallbackThumbnail
 
   let filteredSeries = []
   if (series !== null) {
@@ -40,7 +47,12 @@ const Post = ({ data }) => {
 
   return (
     <Layout>
-      <SEO title={title} description={excerpt} url={`${siteUrl}${slug}`} />
+      <SEO
+        title={title}
+        description={excerpt}
+        url={`${siteUrl}${slug}`}
+        image={seoThumbnail}
+      />
       <Article>
         <Article.Header
           title={title}
@@ -85,9 +97,11 @@ export const pageQuery = graphql`
         update(formatString: "MMMM DD, YYYY")
         tags
         series
+        thumbnail
       }
       fields {
         slug
+        thumbnail
         readingTime {
           minutes
         }

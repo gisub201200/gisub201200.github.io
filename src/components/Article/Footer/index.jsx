@@ -141,6 +141,8 @@ const extractFirstImage = html => {
   return match ? match[1] : null
 }
 
+const DEFAULT_THUMBNAIL = "/thumbnail.png"
+
 const Spinner = () => {
   const theme = useTheme()
   return (
@@ -209,7 +211,7 @@ const Footer = ({ postList, listTitle = "같은 태그 글" }) => {
           <PostListHeader>{listTitle}</PostListHeader>
           <PostList>
             {pagedPosts.map(post => {
-              const image = extractFirstImage(post.html)
+                const image = extractFirstImage(post.html) || DEFAULT_THUMBNAIL
               return (
                 <PostItem key={post.id} to={post.fields.slug}>
                   <div>

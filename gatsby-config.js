@@ -130,9 +130,6 @@ module.exports = {
               strict: `ignore`,
             },
           },
-          {
-            resolve: "gatsby-remark-static-images",
-          },
         ],
       },
     },
@@ -187,7 +184,6 @@ module.exports = {
             `,
             output: `/rss.xml`,
             title: `RSS Feed of ${title}`,
-            match: "^/blog/",
           },
         ],
       },

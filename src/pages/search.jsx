@@ -62,13 +62,16 @@ export const pageQuery = graphql`
     allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
       nodes {
         excerpt(pruneLength: 200, truncate: true)
+        html
         fields {
           slug
+          thumbnail
         }
         frontmatter {
           date(formatString: "MMMM DD, YYYY")
           title
           tags
+          thumbnail
         }
         rawMarkdownBody
       }

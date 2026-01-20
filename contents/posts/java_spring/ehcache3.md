@@ -6,6 +6,7 @@ tags:
 lang: ko-KR
 date: 2023-07-24
 update: 2023-07-24
+thumbnail: ./spring-cache-hierachy/log.png
 ---
 
 
