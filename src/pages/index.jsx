@@ -16,6 +16,9 @@ import PageIndex from "../components/PageIndex";
 const BlogIndex = ({ data }) => {
   const posts = data.paging.nodes
   const tags = _.sortBy(data.totalMarkdown.group, ["totalCount"]).reverse()
+  const totalPosts = data.totalMarkdown.nodes.length
+  const postPerPage = 10
+  const totalPage = Math.max(1, Math.ceil(totalPosts / postPerPage))
 
   if (posts.length === 0) {
     return (
@@ -36,7 +39,7 @@ const BlogIndex = ({ data }) => {
       <SideTagList tags={tags} postCount={posts.length} />
       <PostList postList={posts} />
       <Divider/>
-      <PageIndex currentPage={1} totalPage={5} />
+      <PageIndex currentPage={1} totalPage={totalPage} />
     </Layout>
   )
 }

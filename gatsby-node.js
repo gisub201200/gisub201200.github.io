@@ -160,12 +160,17 @@ exports.createSchemaCustomization = ({ actions }) => {
   const typeDefs = `
   type MarkdownRemark implements Node {
     frontmatter: Frontmatter!
+    fields: MarkdownRemarkFields!
   }
   type Frontmatter {
     title: String!
     description: String
     tags: [String!]!
     series: String
+    thumbnail: String
+  }
+  type MarkdownRemarkFields {
+    slug: String
     thumbnail: String
   }
   `

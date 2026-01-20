@@ -10,7 +10,7 @@ import PrismTheme from "./PrismTheme"
 const Wrapper = styled.div`
   position: relative;
   margin-bottom: 112px;
-  font-size: 19px;
+  font-size: 16px;
   
   @media (max-width: 860px) {
     padding: 0 15px;

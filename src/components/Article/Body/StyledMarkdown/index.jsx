@@ -3,7 +3,7 @@ import styled from "styled-components"
 const StyledMarkdown = styled.div`
   & {
     letter-spacing: .02rem;
-    line-height: 1.8;
+    line-height: 1.6;
 
     color: ${props => props.theme.colors.text};
     overflow: hidden;
@@ -25,7 +25,7 @@ const StyledMarkdown = styled.div`
   & img,
   & .katex-display {
     margin-top: 0;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
   }
 
   & p {
@@ -47,22 +47,22 @@ const StyledMarkdown = styled.div`
   }
 
   & h2 {
-    margin-top: 100px;
-    margin-bottom: 10px;
+    margin-top: 64px;
+    margin-bottom: 8px;
     font-size: 28px;
     color: ${props => props.theme.colors.boldText};
   }
 
   & h3 {
-    margin-top: 70px;
-    margin-bottom: 10px;
+    margin-top: 48px;
+    margin-bottom: 8px;
     font-size: 22.4px;
     color: ${props => props.theme.colors.boldText};
   }
 
   & h4 {
-    margin-top: 50px;
-    margin-bottom: 5px;
+    margin-top: 36px;
+    margin-bottom: 6px;
     font-size: 20px;
     color: ${props => props.theme.colors.boldText};
   }
@@ -85,7 +85,7 @@ const StyledMarkdown = styled.div`
 
   & blockquote {
     padding: 18px 24px;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     font-size: 17px;
     border-left: 4px solid ${props => props.theme.colors.blockQuoteBorder};
     //background-color: ${props => props.theme.colors.blockQuoteBackground};
@@ -180,7 +180,7 @@ const StyledMarkdown = styled.div`
   }
 
   & li {
-    margin-bottom: 10px;
+    margin-bottom: 6px;
   }
 
   & li p {
@@ -204,7 +204,7 @@ const StyledMarkdown = styled.div`
   & code[class*="language-"],
   & pre[class*="language-"] {
     font-size: 15px;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
   }
 
   & img {
@@ -212,6 +212,17 @@ const StyledMarkdown = styled.div`
     margin-left: auto;
     margin-right: auto;
     max-width: 100%;
+    height: auto;
+  }
+
+  & .gatsby-resp-image-wrapper {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  & .gatsby-resp-image-image {
+    object-fit: cover;
+    object-position: center;
   }
 
   & figcaption {
