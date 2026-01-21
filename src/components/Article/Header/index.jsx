@@ -7,14 +7,14 @@ import Divider from "components/Divider"
 import TagList from "components/TagList"
 
 const Wrapper = styled.div`
-  margin-top: 32px;
+  margin-top: 20px;
   @media (max-width: 860px) {
     padding: 0 15px;
   }
 `
 
 const ArticleTitle = styled.h1`
-  margin-bottom: 25.6px;
+  margin-bottom: 16px;
   line-height: 1.2;
   font-size: 30px;
   font-weight: 700;
@@ -22,7 +22,7 @@ const ArticleTitle = styled.h1`
 `
 
 const Information = styled.div`
-  margin-bottom: 32px;
+  margin-bottom: 20px;
   font-size: 16px;
 `
 

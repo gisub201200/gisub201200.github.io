@@ -20,12 +20,12 @@ const StyledMarkdown = styled.div`
   & > ul,
   & > ol,
   & table,
-  & blockquote ,
+  & blockquote,
   & pre,
   & img,
   & .katex-display {
     margin-top: 0;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
 
   & p {
@@ -42,26 +42,26 @@ const StyledMarkdown = styled.div`
   & h4,
   & h5,
   & h6 {
-    margin: 11.2px 0 4.8px 0;
+    margin: 8px 0 4px 0;
     font-weight: 700;
   }
 
   & h2 {
-    margin-top: 64px;
+    margin-top: 36px;
     margin-bottom: 8px;
     font-size: 28px;
     color: ${props => props.theme.colors.boldText};
   }
 
   & h3 {
-    margin-top: 48px;
+    margin-top: 28px;
     margin-bottom: 8px;
     font-size: 22.4px;
     color: ${props => props.theme.colors.boldText};
   }
 
   & h4 {
-    margin-top: 36px;
+    margin-top: 22px;
     margin-bottom: 6px;
     font-size: 20px;
     color: ${props => props.theme.colors.boldText};
@@ -218,6 +218,7 @@ const StyledMarkdown = styled.div`
   & .gatsby-resp-image-wrapper {
     max-width: 100%;
     overflow: hidden;
+    margin-bottom: 6px;
   }
 
   & .gatsby-resp-image-image {
