@@ -3,7 +3,6 @@ import {graphql} from "gatsby"
 
 import Layout from "components/Layout"
 import SEO from "components/SEO"
-import Bio from "components/Bio"
 import PostList from "components/PostList"
 import PageIndex from "components/PageIndex"
 import Divider from "components/Divider"
@@ -31,9 +30,7 @@ const PostPagination = ({data, pageContext}) => {
   return (
       <Layout>
         <SEO title={title} description={description} url={siteUrl}/>
-        <VerticalSpace size={48}/>
-        <Bio/>
-        <Divider/>
+        <VerticalSpace size={4}/>
         <PostList postList={posts} />
         <Divider/>
         <PageIndex currentPage={currentPage} totalPage={totalPage} />

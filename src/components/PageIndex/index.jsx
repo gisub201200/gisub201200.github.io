@@ -39,14 +39,16 @@ const CurrentPageLink = styled(PageLink)`
 const PageIndex = ({currentPage, totalPage}) => {
   const indexSize = 5
   const pageNumbers = Array.from({length: totalPage}, (_, i) => i + 1)
-  const startPage = Math.min(Math.max(1, currentPage - 2),
-      totalPage - indexSize >=1 ? totalPage - indexSize : 1)
+  const startPage = Math.min(
+    Math.max(1, currentPage - 2),
+    Math.max(1, totalPage - indexSize + 1)
+  )
   const endPage = Math.min(startPage + indexSize - 1, totalPage)
 
   return (
       <PageIndexContainer>
-        {currentPage > 3 && totalPage > indexSize && (
-            <PageLink to={currentPage === 2 ? "/" : `/page/${currentPage - 1}`}>
+        {startPage > 1 && (
+            <PageLink to={startPage - 1 === 1 ? "/" : `/page/${startPage - 1}`}>
               &lt;
             </PageLink>
         )}
@@ -62,8 +64,8 @@ const PageIndex = ({currentPage, totalPage}) => {
             </PageLink>
           )
         })}
-        {currentPage < totalPage - 3 && totalPage > indexSize && (
-            <PageLink to={`/page/${currentPage + 1}`}>&gt;</PageLink>
+        {endPage < totalPage && (
+            <PageLink to={`/page/${endPage + 1}`}>&gt;</PageLink>
         )}
       </PageIndexContainer>
   )
