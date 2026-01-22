@@ -4,10 +4,11 @@ import styled from "styled-components"
 const Wrapper = styled.h1`
   margin-bottom: 24px;
   font-size: ${props => props.size};
-  font-weight: 700;
-  line-height: 1.3;
+  font-weight: 600;
+  line-height: 1.4;
+  font-family: ${props => props.theme.fonts.heading};
   color: ${props => props.theme.colors.boldText};
-  word-break: break-all;
+  word-break: keep-all;
 
   & > a {
     text-decoration: none;
@@ -22,9 +23,9 @@ const Wrapper = styled.h1`
 
 const Title = ({ size, children }) => {
   const sizes = {
-    sm: "19.2px",
-    md: "25.6px",
-    bg: "30px",
+    sm: "18px",
+    md: "26px",
+    bg: "32px",
   }
 
   return <Wrapper size={sizes[size]}> {children} </Wrapper>

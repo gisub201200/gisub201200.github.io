@@ -3,16 +3,18 @@ import styled from "styled-components"
 import { Link } from "gatsby"
 
 const TagListWrapper = styled.div`
-  margin-bottom: 16px;
-  word-break: break-all;
+  margin-bottom: ${props => (props.compact ? "0" : "16px")};
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-family: ${props => props.theme.fonts.ui};
 `
 
 const TagLink = styled.div`
   display: inline-block;
-  padding: 9.6px 11.2px;
-  margin-right: 8px;
-  margin-bottom: 0px;
-  border-radius: 50px;
+  padding: 6px 10px;
+  border-radius: ${props => props.theme.radii.sm};
+  border: 1px solid ${props => props.theme.colors.border};
   background-color: ${props =>
     props.selected
       ? props.theme.colors.selectedTagBackground
@@ -22,7 +24,8 @@ const TagLink = styled.div`
       ? props.theme.colors.selectedTagText
       : props.theme.colors.tagText};
   text-decoration: none;
-  font-size: 13px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
   transition: all 0.2s;
 
   &:hover {
@@ -39,12 +42,12 @@ const spaceToDash = text => {
 
 const encodeTag = tag => encodeURIComponent(tag)
 
-const TagList = ({ tagList, count, selected }) => {
+const TagList = ({ tagList, count, selected, compact }) => {
   if (!tagList) return null
 
   if (!count) {
     return (
-      <TagListWrapper>
+      <TagListWrapper compact={compact}>
         {tagList.map((tag, i) => (
           <Link
             key={JSON.stringify({ tag, i })}
@@ -58,7 +61,7 @@ const TagList = ({ tagList, count, selected }) => {
   }
 
   return (
-    <TagListWrapper>
+    <TagListWrapper compact={compact}>
       {tagList.map((tag, i) => (
         <Link
           key={JSON.stringify({ tag, i })}

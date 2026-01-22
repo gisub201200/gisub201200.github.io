@@ -2,9 +2,9 @@ import styled from "styled-components"
 
 const StyledMarkdown = styled.div`
   & {
-    letter-spacing: .02rem;
-    line-height: 1.6;
-
+    grid-column: 1 / span 8;
+    letter-spacing: 0.01em;
+    line-height: 1.8;
     color: ${props => props.theme.colors.text};
     overflow: hidden;
   }
@@ -29,8 +29,10 @@ const StyledMarkdown = styled.div`
   }
 
   & p {
-    overflow-x: scroll;
-    word-break: break-all;
+    overflow-x: auto;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    line-break: strict;
 
     ::-webkit-scrollbar {
       display: none;
@@ -42,28 +44,50 @@ const StyledMarkdown = styled.div`
   & h4,
   & h5,
   & h6 {
-    margin: 11.2px 0 4.8px 0;
-    font-weight: 700;
+    margin: 18px 0 8px 0;
+    font-weight: 600;
+    font-family: ${props => props.theme.fonts.heading};
   }
 
-  & h2 {
-    margin-top: 64px;
-    margin-bottom: 8px;
-    font-size: 28px;
+  & h1 {
+    margin: 28px 0 12px 0;
+    font-weight: 600;
+    font-family: ${props => props.theme.fonts.heading};
+    font-size: 26px;
     color: ${props => props.theme.colors.boldText};
   }
 
+  & h2 {
+    margin-top: 36px;
+    margin-bottom: 10px;
+    font-size: 22px;
+    color: ${props => props.theme.colors.boldText};
+    position: relative;
+    padding-left: 18px;
+  }
+
+  & h2::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 8px;
+    height: 8px;
+    border: 1px solid ${props => props.theme.colors.accent};
+    border-radius: 2px;
+  }
+
   & h3 {
-    margin-top: 48px;
+    margin-top: 28px;
     margin-bottom: 8px;
-    font-size: 22.4px;
+    font-size: 19px;
     color: ${props => props.theme.colors.boldText};
   }
 
   & h4 {
-    margin-top: 36px;
+    margin-top: 28px;
     margin-bottom: 6px;
-    font-size: 20px;
+    font-size: 19px;
     color: ${props => props.theme.colors.boldText};
   }
 
@@ -88,7 +112,7 @@ const StyledMarkdown = styled.div`
     margin-bottom: 16px;
     font-size: 17px;
     border-left: 4px solid ${props => props.theme.colors.blockQuoteBorder};
-    //background-color: ${props => props.theme.colors.blockQuoteBackground};
+    background-color: ${props => props.theme.colors.blockQuoteBackground};
 
     & *:last-child {
       margin-bottom: 0;
@@ -108,7 +132,7 @@ const StyledMarkdown = styled.div`
   }
 
   & th {
-    border-bottom: 2px solid ${props => props.theme.colors.border};
+    border-bottom: 1px solid ${props => props.theme.colors.border};
     font-size: 90%;
     font-weight: 700;
   }
@@ -144,7 +168,7 @@ const StyledMarkdown = styled.div`
     padding: 3px 5px 3px 5px;
     font-size: 13px;
     background-color: ${props => props.theme.colors.inlineCodeBackground};
-    font-weight: bold;
+    font-weight: 600;
     color: ${props => props.theme.colors.text};
   }
 
@@ -228,7 +252,7 @@ const StyledMarkdown = styled.div`
   & figcaption {
     margin-top: 5px;
     text-align: center;
-    color: #868e96;
+    color: ${props => props.theme.colors.tertiaryText};
     font-size: 12px;
     font-style: italic;
   }
@@ -241,12 +265,13 @@ const StyledMarkdown = styled.div`
   & a {
     padding: 1.6px 0;
     color: ${props => props.theme.colors.hrefLink};
-    text-decoration-line: none
+    text-decoration-line: none;
+    border-bottom: 1px solid transparent;
   }
 
   & a:hover {
-    background-color: ${props => props.theme.colors.text};
-    color: ${props => props.theme.colors.hoveredLinkText};
+    border-bottom: 1px solid ${props => props.theme.colors.accent};
+    background-color: transparent;
   }
 
   & .anchor-header.after:hover {
@@ -256,6 +281,10 @@ const StyledMarkdown = styled.div`
   & sup {
     vertical-align: super;
     font-size: smaller;
+  }
+
+  @media (max-width: 860px) {
+    grid-column: 1 / -1;
   }
 
   & .footnotes  {

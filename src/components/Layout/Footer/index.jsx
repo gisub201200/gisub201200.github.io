@@ -9,23 +9,21 @@ const FooterWrapper = styled.footer`
   padding: 40px 0;
   border-top: 1px solid ${props => props.theme.colors.divider};
   text-align: center;
-  font-size: 11pt;
-  font-weight: lighter;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  font-family: ${props => props.theme.fonts.ui};
   color: ${props => props.theme.colors.secondaryText};
 
   & > a {
-    color: ${props => props.theme.colors.text};
+    color: ${props => props.theme.colors.accent};
   }
 `
 
 const Footer = () => {
   return (
     <FooterWrapper>
-      © {title}, Built with Gatsby and{" "}
-      <a href="https://github.com/devHudi/gatsby-starter-hoodie" target="blank">
-        gatsby-starter-hoodie
-      </a>{" "}
-      theme.
+      © {title}. 한자어의 결을 천천히 읽는 아카이브.
     </FooterWrapper>
   )
 }

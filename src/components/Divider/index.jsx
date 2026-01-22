@@ -2,6 +2,7 @@ import PropTypes from "prop-types"
 import styled from "styled-components"
 
 const Divider = styled.hr`
+  grid-column: 1 / -1;
   margin-top: ${props => props.mt};
   margin-bottom: ${props => props.mb};
   border: none;

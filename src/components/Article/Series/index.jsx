@@ -6,15 +6,24 @@ import { Link } from "gatsby"
 import { AiOutlineArrowLeft } from "react-icons/ai"
 
 const SeriesWrapper = styled.div`
+  grid-column: 1 / span 8;
   margin-bottom: 32px;
-  padding: 16px;
+  padding: 18px 20px;
+  border: 1px solid ${props => props.theme.colors.border};
+  border-radius: ${props => props.theme.radii.sm};
   background-color: ${props => props.theme.colors.seriesBackground};
+
+  @media (max-width: 860px) {
+    grid-column: 1 / -1;
+  }
 `
 
 const SeriesHeader = styled.h2`
   margin-bottom: 16px;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  font-family: ${props => props.theme.fonts.ui};
   color: ${props => props.theme.colors.text};
 
   & > span {
@@ -64,7 +73,7 @@ const Post = styled.li`
 
 const ViewMore = styled.div`
   margin-top: 15px;
-  font-size: 14.4px;
+  font-size: 13px;
   text-align: center;
   color: ${props => props.theme.colors.tertiaryText};
   cursor: pointer;

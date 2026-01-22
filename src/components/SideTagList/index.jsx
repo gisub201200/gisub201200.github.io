@@ -3,31 +3,38 @@ import _ from "lodash"
 import styled from "styled-components"
 import { Link } from "gatsby"
 
-const RelativeWrapper = styled.div`
-  position: relative;
-`
-
 const Wrapper = styled.aside`
-  position: absolute;
-  left: 112%;
-  top: 0px;
-  width: 200px;
-  height: 100px;
-  font-size: 16px;
+  grid-column: 9 / -1;
+  position: sticky;
+  top: 120px;
+  align-self: start;
+  font-size: 14px;
+  padding: 16px 18px;
+  border: 1px solid ${props => props.theme.colors.border};
+  border-radius: ${props => props.theme.radii.sm};
+  background: ${props => props.theme.colors.surface};
+  font-family: ${props => props.theme.fonts.ui};
 
-  @media (max-width: 1300px) {
+  & ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  @media (max-width: 1024px) {
     display: none;
   }
 `
 
 const Title = styled.div`
-  margin-bottom: 25px;
-  font-weight: bold;
+  margin-bottom: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   color: ${props => props.theme.colors.secondaryText};
 `
 
 const Tag = styled.li`
-  margin-bottom: 16px;
+  margin-bottom: 10px;
   color: ${props => props.theme.colors.tertiaryText};
   cursor: pointer;
   transition: color 0.3s;
@@ -44,23 +51,21 @@ const Tag = styled.li`
 
 const SideTagList = ({ tags, postCount }) => {
   return (
-    <RelativeWrapper>
-      <Wrapper>
-        <Title>TAG LIST</Title>
-        <ul>
-          <Tag>
-            <Link to="/tags">all ({postCount})</Link>
+    <Wrapper>
+      <Title>태그</Title>
+      <ul>
+        <Tag>
+          <Link to="/tags">전체 ({postCount})</Link>
+        </Tag>
+        {_.map(tags, tag => (
+          <Tag key={tag.fieldValue}>
+            <Link to={`/tags?q=${tag.fieldValue}`}>
+              {tag.fieldValue} ({tag.totalCount})
+            </Link>
           </Tag>
-          {_.map(tags, tag => (
-            <Tag>
-              <Link to={`/tags?q=${tag.fieldValue}`}>
-                {tag.fieldValue} ({tag.totalCount})
-              </Link>
-            </Tag>
-          ))}
-        </ul>
-      </Wrapper>
-    </RelativeWrapper>
+        ))}
+      </ul>
+    </Wrapper>
   )
 }
 

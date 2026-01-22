@@ -14,11 +14,8 @@ import NoContent from "components/NoContent"
 import { title, description, siteUrl } from "../../blog-config"
 
 const TagListWrapper = styled.div`
+  grid-column: 1 / -1;
   margin-top: 20px;
-
-  @media (max-width: 860px) {
-    padding: 0 15px;
-  }
 `
 
 const SeriesPage = ({ data }) => {
@@ -42,7 +39,7 @@ const SeriesPage = ({ data }) => {
 
       <TagListWrapper>
         {series.length > 0 && (
-          <Title size="sm">There are {series.length} series.</Title>
+          <Title size="sm">연재 묶음 {series.length}개</Title>
         )}
       </TagListWrapper>
 

@@ -12,11 +12,19 @@ import {
 import { siteUrl, description, author, links } from "../../../blog-config"
 
 const BioWrapper = styled.div`
-  display: flex;
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto 1fr;
   align-items: center;
+  gap: 24px;
+  padding: 28px 32px;
+  border: 1px solid ${props => props.theme.colors.border};
+  border-radius: ${props => props.theme.radii.sm};
+  background: ${props => props.theme.colors.surface};
 
   @media (max-width: 860px) {
-    padding: 0 15px;
+    grid-template-columns: 1fr;
+    padding: 22px;
   }
 `
 
@@ -27,25 +35,26 @@ const profileImageRoot =
 
 const Profile = styled.div`
   flex: 0 0 auto;
-  margin-right: 16px;
-  width: 128px;
-  height: 128px;
-  border-radius: 999px;
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  border: 1px solid ${props => props.theme.colors.border};
   background-image: url(${profileImageRoot}/profile1.png);
   background-size: cover;
   background-position: center;
 `
 
 const Author = styled.div`
-  margin-bottom: 4.8px;
+  margin-bottom: 8px;
   font-size: 24px;
-  font-weight: 700;
-  color: ${props => props.theme.colors.text};
+  font-weight: 600;
+  color: ${props => props.theme.colors.boldText};
+  font-family: ${props => props.theme.fonts.heading};
 `
 
 const Description = styled.div`
-  margin-bottom: 11.2px;
-  line-height: 1.5;
+  margin-bottom: 12px;
+  line-height: 1.7;
   font-size: 16px;
   color: ${props => props.theme.colors.secondaryText};
 `
@@ -56,8 +65,8 @@ const LinksWrapper = styled.div`
   }
 
   & svg {
-    width: 25.6px;
-    height: 25.6px;
+    width: 22px;
+    height: 22px;
     cursor: pointer;
   }
 

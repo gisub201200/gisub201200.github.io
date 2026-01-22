@@ -1,12 +1,9 @@
 import React from "react"
-import _ from "lodash"
 import { graphql } from "gatsby"
 
 import Layout from "components/Layout"
 import SEO from "components/SEO"
-import Bio from "components/Bio"
 import PostList from "components/PostList"
-import SideTagList from "components/SideTagList"
 import Divider from "components/Divider"
 import VerticalSpace from "components/VerticalSpace"
 
@@ -15,7 +12,6 @@ import PageIndex from "../components/PageIndex";
 
 const BlogIndex = ({ data }) => {
   const posts = data.paging.nodes
-  const tags = _.sortBy(data.totalMarkdown.group, ["totalCount"]).reverse()
   const totalPosts = data.totalMarkdown.nodes.length
   const postPerPage = 10
   const totalPage = Math.max(1, Math.ceil(totalPosts / postPerPage))
@@ -33,10 +29,7 @@ const BlogIndex = ({ data }) => {
   return (
     <Layout>
       <SEO title={title} description={description} url={siteUrl} />
-      <VerticalSpace size={48} />
-      <Bio />
-      <Divider />
-      <SideTagList tags={tags} postCount={posts.length} />
+      <VerticalSpace size={4} />
       <PostList postList={posts} />
       <Divider/>
       <PageIndex currentPage={1} totalPage={totalPage} />
@@ -54,10 +47,6 @@ export const pageQuery = graphql`
             }
         }
         paging : allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC } limit: 10) {
-            group(field: frontmatter___tags) {
-                fieldValue
-                totalCount
-            }
             nodes {
                 excerpt(pruneLength: 200, truncate: true)
                 html
@@ -79,10 +68,6 @@ export const pageQuery = graphql`
         totalMarkdown: allMarkdownRemark(
             sort: { fields: [frontmatter___date], order: DESC }
         ){
-            group(field: frontmatter___tags) {
-                fieldValue
-                totalCount
-            }
             nodes{
                 fields {
                     slug

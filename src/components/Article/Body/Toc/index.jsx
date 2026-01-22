@@ -12,18 +12,22 @@ import RevealOnScroll from "components/RevealOnScroll"
 const STICK_OFFSET = 100
 
 const TocWrapper = styled.div`
-  position: absolute;
+  grid-column: 9 / -1;
+  position: sticky;
+  top: ${STICK_OFFSET}px;
+  align-self: start;
   opacity: 1;
-  left: 100%;
+  font-family: ${props => props.theme.fonts.ui};
 
   & > div {
-    padding-right: 20px;
-    padding-left: 16px;
-    margin-left: 48px;
+    padding: 16px 18px;
     position: relative;
-    width: 240px;
-    max-height: calc(100% - 185px);
+    width: 100%;
+    max-height: calc(100vh - 220px);
     overflow-y: auto;
+    border: 1px solid ${props => props.theme.colors.border};
+    border-radius: ${props => props.theme.radii.sm};
+    background: ${props => props.theme.colors.surface};
 
     ::-webkit-scrollbar {
       width: 3px;
@@ -35,24 +39,17 @@ const TocWrapper = styled.div`
     ::-webkit-scrollbar-thumb {
       background: ${props => props.theme.colors.scrollHandle};
     }
-
-    ${props =>
-      props.stick &&
-      css`
-        position: fixed;
-        top: ${STICK_OFFSET}px;
-      `}
   }
 
-  @media (max-width: 1300px) {
-    display: None;
+  @media (max-width: 1024px) {
+    display: none;
   }
 `
 
 const ParagraphTitle = styled.div`
   margin-bottom: 8px;
-  padding-left: ${props => (props.subtitle ? 19.2 : 0)}px;
-  font-size: 14.4px;
+  padding-left: ${props => (props.subtitle ? 16 : 0)}px;
+  font-size: 13px;
   color: ${props => props.theme.colors.mutedText};
   line-height: 1.3;
   transition: all 0.2s;
@@ -60,7 +57,7 @@ const ParagraphTitle = styled.div`
   ${props =>
     props.active &&
     css`
-      transform: translate(-11.2px, 0);
+      transform: translate(-6px, 0);
       color: ${props => props.theme.colors.secondaryText};
     `}
 

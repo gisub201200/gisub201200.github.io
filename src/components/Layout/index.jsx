@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { ThemeProvider } from "styled-components"
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux"
@@ -15,8 +15,18 @@ const PageWrapper = styled.div`
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  --sidebar-width: 0px;
+  --header-height: 88px;
+
+  @media (max-width: 860px) {
+    --header-height: 80px;
+  }
+
+  @media (max-width: 560px) {
+    --header-height: 72px;
+  }
 `;
-const Layout = ({ children }) => {
+const Layout = ({ children, headerProps }) => {
   const dispatch = useDispatch()
   const { theme } = useSelector(state => state.theme)
 
@@ -46,8 +56,13 @@ const Layout = ({ children }) => {
     <ThemeProvider theme={theme === "light" ? light : dark}>
       <GlobalStyles />
       <PageWrapper>
-      <Header toggleTheme={toggleTheme} />
-      <Body>{children}</Body>
+      <Header
+        toggleTheme={toggleTheme}
+        {...headerProps}
+      />
+      <Body>
+        {children}
+      </Body>
       <Footer />
       </PageWrapper>
     </ThemeProvider>

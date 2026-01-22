@@ -15,8 +15,11 @@ const resolveOgImage = image => {
   return `${siteUrl.replace(/\/$/, "")}${prefixed}`
 }
 
-const SEO = ({ title, description, url, image }) => {
+const SEO = ({ title, description, url, image, keywords }) => {
   const ogImage = resolveOgImage(image)
+  const normalizedKeywords = Array.isArray(keywords)
+    ? keywords.filter(Boolean).join(", ")
+    : keywords
 
   return (
     <Helmet>
@@ -26,6 +29,9 @@ const SEO = ({ title, description, url, image }) => {
       <meta property="og:image" content={ogImage} />
       {description && <meta name="description" content={description} />}
       {description && <meta property="og:description" content={description} />}
+      {normalizedKeywords && (
+        <meta name="keywords" content={normalizedKeywords} />
+      )}
     </Helmet>
   )
 }

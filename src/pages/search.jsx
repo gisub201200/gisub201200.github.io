@@ -1,55 +1,40 @@
-import React, { useState, useCallback } from "react"
-import styled from "styled-components"
+import React, { useEffect, useMemo, useState } from "react"
 import SEO from "components/SEO"
 import { graphql } from "gatsby"
+import queryString from "query-string"
 
 import Layout from "components/Layout"
 import PostList from "components/PostList"
-import TextField from "components/TextField"
-import Title from "components/Title"
-import VerticalSpace from "components/VerticalSpace"
-
 import { title, description, siteUrl } from "../../blog-config"
 
-const SearchWrapper = styled.div`
-  margin-top: 20px;
-  @media (max-width: 860px) {
-    padding: 0 15px;
-  }
-`
-
-const Search = ({ data }) => {
+const Search = ({ data, location }) => {
   const posts = data.allMarkdownRemark.nodes
 
-  const [query, setQuery] = useState("")
+  const initialQuery = useMemo(() => {
+    const parsed = queryString.parse(location?.search || "")
+    return typeof parsed.q === "string" ? parsed.q : ""
+  }, [location?.search])
+  const [query, setQuery] = useState(initialQuery)
 
-  const filteredPosts = useCallback(
-    posts.filter(post => {
+  useEffect(() => {
+    setQuery(initialQuery)
+  }, [initialQuery])
+
+  const filteredPosts = useMemo(() => {
+    const lowerQuery = query.toLocaleLowerCase()
+    return posts.filter(post => {
       const { frontmatter, rawMarkdownBody } = post
       const { title } = frontmatter
-      const lowerQuery = query.toLocaleLowerCase()
 
       if (rawMarkdownBody.toLocaleLowerCase().includes(lowerQuery)) return true
 
       return title.toLocaleLowerCase().includes(lowerQuery)
-    }),
-    [query]
-  )
+    })
+  }, [posts, query])
 
   return (
-    <Layout>
+    <Layout headerProps={{ isSearchPage: true }}>
       <SEO title={title} description={description} url={siteUrl} />
-      <SearchWrapper>
-        <Title size="sm">
-          There are {filteredPosts.length} post{filteredPosts.length > 1 && "s"}
-          .
-        </Title>
-        <TextField
-          onChange={e => setQuery(e.target.value)}
-          placeholder="Search"
-        />
-      </SearchWrapper>
-      <VerticalSpace size={70} />
       <PostList postList={filteredPosts} />
     </Layout>
   )

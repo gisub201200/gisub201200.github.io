@@ -11,37 +11,38 @@ import Divider from "components/Divider"
 import { description, siteUrl } from "../../blog-config"
 
 const Header = styled.div`
-  @media (max-width: 860px) {
-    padding: 0px 15px;
-  }
+  grid-column: 1 / -1;
 `
 
 const Title = styled.h1`
-  margin-bottom: 15px;
-  line-height: 1.2;
-  font-size: 44.8px;
-  font-weight: bold;
-  color: ${props => props.theme.colors.text};
-  word-break: break-all;
+  margin-bottom: 12px;
+  line-height: 1.25;
+  font-size: 34px;
+  font-weight: 600;
+  font-family: ${props => props.theme.fonts.heading};
+  color: ${props => props.theme.colors.boldText};
+  word-break: keep-all;
 `
 
 const Subtitle = styled.h3`
   display: inline-block;
-  padding: 2px 3px;
-  margin-top: 32px;
+  padding: 4px 8px;
+  margin-top: 20px;
   margin-bottom: 8px;
-  font-size: 20px;
-  font-weight: bold;
-  background-color: ${props => props.theme.colors.text};
-  color: ${props => props.theme.colors.bodyBackground};
-  letter-spacing: -1px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid ${props => props.theme.colors.border};
+  color: ${props => props.theme.colors.secondaryText};
+  letter-spacing: 0.08em;
+  font-family: ${props => props.theme.fonts.ui};
 `
 
 const SeriesInform = styled.div`
   display: flex;
   align-items: center;
-  font-size: 16px;
-  color: ${props => props.theme.colors.text};
+  font-size: 13px;
+  color: ${props => props.theme.colors.secondaryText};
+  font-family: ${props => props.theme.fonts.ui};
 
   & > span {
     margin: 0 3px;
@@ -66,14 +67,14 @@ const Series = ({ pageContext, data }) => {
       />
 
       <Header>
-        <Subtitle> SERIES </Subtitle>
+        <Subtitle>연재</Subtitle>
         <Title> {seriesName} </Title>
 
         <SeriesInform>
-          <span>{posts.length} Posts</span>
+          <span>글 {posts.length}편</span>
           <span>·</span>
           <Date>
-            Last updated on {posts[posts.length - 1].frontmatter.date}
+            최신 업데이트 {posts[posts.length - 1].frontmatter.date}
           </Date>
         </SeriesInform>
 

@@ -8,10 +8,8 @@ import Title from "components/Title"
 import Divider from "components/Divider"
 
 const SeriesListWrapper = styled.div`
+  grid-column: 1 / -1;
   margin-bottom: 60px;
-  @media (max-width: 860px) {
-    padding: 0 10px;
-  }
 `
 
 const SeriesWrapper = styled.div`
@@ -28,19 +26,17 @@ const SeriesInform = styled.div`
   display: flex;
   align-items: center;
   color: ${props => props.theme.colors.tertiaryText};
+  font-size: 13px;
+  letter-spacing: 0.04em;
 
   & > span {
     margin: 0 5px;
   }
 `
 
-const Date = styled.p`
-  font-size: 14.4px;
-`
+const Date = styled.p``
 
-const PostCount = styled.p`
-  font-size: 14.4px;
-`
+const PostCount = styled.p``
 
 const checkIsScrollAtBottom = () => {
   return (
@@ -75,7 +71,7 @@ const SeriesList = ({ seriesList }) => {
     <SeriesListWrapper>
       {seriesList.slice(0, seriesCount).map((series, i) => {
         return (
-          <>
+          <React.Fragment key={series.name || i}>
             <SeriesWrapper>
               <Title size="bg">
                 <Link to={`/series/${_.replace(series.name, /\s/g, "-")}`}>
@@ -83,16 +79,16 @@ const SeriesList = ({ seriesList }) => {
                 </Link>
               </Title>
               <SeriesInform>
-                <PostCount>{series.posts.length} Posts</PostCount>
+                <PostCount>글 {series.posts.length}편</PostCount>
                 <span>·</span>
-                <Date>Last updated on {series.lastUpdated}</Date>
+                <Date>최신 업데이트 {series.lastUpdated}</Date>
               </SeriesInform>
             </SeriesWrapper>
 
             {seriesCount - 1 !== i && seriesList.length - 1 !== i && (
               <Divider mt="48px" mb="32px" />
             )}
-          </>
+          </React.Fragment>
         )
       })}
     </SeriesListWrapper>

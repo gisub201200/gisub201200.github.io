@@ -17,11 +17,8 @@ import VerticleSpace from "components/VerticalSpace"
 import { title, description, siteUrl } from "../../blog-config"
 
 const TagListWrapper = styled.div`
+  grid-column: 1 / -1;
   margin-top: 20px;
-
-  @media (max-width: 860px) {
-    padding: 0 15px;
-  }
 `
 
 const TagsPage = ({ data, location }) => {
@@ -46,12 +43,11 @@ const TagsPage = ({ data, location }) => {
       <TagListWrapper>
         {selected ? (
           <Title size="sm">
-            There are {filteredPosts.length} post
-            {filteredPosts.length > 1 && "s"} that match #{selected}.
+            #{selected} 검색 결과 {filteredPosts.length}개
           </Title>
         ) : (
           <Title size="sm">
-            There are {tags.length} tag{tags.length > 1 && "s"}.
+            전체 태그 {tags.length}개
           </Title>
         )}
 

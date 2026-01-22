@@ -12,19 +12,20 @@ import Divider from "components/Divider"
 import Bio from "components/Bio"
 
 const PostListSection = styled.section`
+  grid-column: 1 / -1;
   margin-bottom: 56px;
-  padding: 0 8px;
 
   @media (max-width: 860px) {
-    padding: 0 12px;
+    grid-column: 1 / -1;
   }
 `
 
 const PostListHeader = styled.h3`
   margin-bottom: 20px;
-  font-size: 16px;
-  letter-spacing: 1.2px;
+  font-size: 15px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  font-family: ${props => props.theme.fonts.ui};
   color: ${props => props.theme.colors.secondaryText};
 `
 
@@ -57,6 +58,7 @@ const PostItem = styled(Link)`
 const PostTitle = styled.div`
   font-size: 17px;
   font-weight: 600;
+  font-family: ${props => props.theme.fonts.heading};
   color: ${props => props.theme.colors.text};
   line-height: 1.4;
 `
@@ -79,7 +81,7 @@ const PageButton = styled.button`
   min-width: 32px;
   height: 32px;
   padding: 0 10px;
-  border-radius: 999px;
+  border-radius: ${props => props.theme.radii.sm};
   border: 1px solid ${props => props.theme.colors.heroBorder};
   background: ${props =>
     props.active ? props.theme.colors.accent : "transparent"};
@@ -98,7 +100,7 @@ const PageButton = styled.button`
 const PostThumb = styled.div`
   width: 84px;
   height: 84px;
-  border-radius: 18px;
+  border-radius: ${props => props.theme.radii.sm};
   border: 1px solid ${props => props.theme.colors.heroBorder};
   background-color: ${props => props.theme.colors.background};
   background-image: ${props => (props.image ? `url(${props.image})` : "none")};
@@ -107,7 +109,7 @@ const PostThumb = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "Playfair Display", "Times New Roman", serif;
+  font-family: ${props => props.theme.fonts.heading};
   font-size: 18px;
   color: ${props => props.theme.colors.accent};
 
@@ -118,6 +120,7 @@ const PostThumb = styled.div`
 `
 
 const CommentWrapper = styled.div`
+  grid-column: 1 / -1;
   @media (max-width: 860px) {
     padding: 0 15px;
   }

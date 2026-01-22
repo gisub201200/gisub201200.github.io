@@ -32,6 +32,8 @@ module.exports = {
         fonts: [
           'SFMono-Regular',
           `noto sans kr:300,400,500,700,900`,
+          `noto serif kr:400,500,600,700`,
+          `song myung`,
           `source code pro:700`, // you can also specify font weights and styles
         ],
         display: "swap",

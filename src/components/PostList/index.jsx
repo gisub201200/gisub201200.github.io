@@ -2,84 +2,81 @@ import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 import _ from "lodash"
 
-import { Link, withPrefix } from "gatsby"
+import { Link } from "gatsby"
 
-import Title from "components/Title"
-import Divider from "components/Divider"
 import TagList from "components/TagList"
 
 const PostListWrapper = styled.div`
-  @media (max-width: 860px) {
-    padding: 0 10px;
-  }
+  grid-column: ${props => props.span || "1 / -1"};
+  display: grid;
+  gap: 28px;
 `
 
-const PostWrapper = styled.div`
+const PostCard = styled.article`
   position: relative;
-  top: 0;
-  transition: all 0.5s;
-  display: flex;
-  align-items: center;
-  gap: 24px;
-
-  @media (max-width: 860px) {
-    padding: 0 5px;
-    flex-direction: column;
-    gap: 16px;
-    align-items: stretch;
-  }
-`
-
-const ThumbnailLink = styled(Link)`
-  flex: 0 0 168px;
-  height: 104px;
-  border-radius: 10px;
-  overflow: hidden;
   border: 1px solid ${props => props.theme.colors.border};
-  background: ${props => props.theme.colors.background};
-  display: block;
+  background: ${props => props.theme.colors.surface};
+  padding: 24px 28px;
+  border-radius: ${props => props.theme.radii.sm};
+  box-shadow: ${props => props.theme.shadows.subtle};
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: ${props => props.theme.shadows.soft};
+  }
 
   @media (max-width: 860px) {
-    width: 100%;
-    height: 180px;
+    padding: 20px 20px;
   }
 `
 
-const ThumbnailImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+const CardHeader = styled.div`
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
 `
 
-const ThumbnailPlaceholder = styled.div`
-  width: 100%;
-  height: 100%;
+const WordBlock = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+`
+
+const WordLink = styled(Link)`
+  font-family: ${props => props.theme.fonts.heading};
+  font-size: 26px;
+  line-height: 1.35;
+  color: ${props => props.theme.colors.boldText};
+  text-decoration: none;
+  letter-spacing: 0.01em;
+`
+
+const Meaning = styled.p`
+  margin-bottom: 18px;
+  font-size: 17px;
+  line-height: 1.8;
+  color: ${props => props.theme.colors.secondaryText};
+  word-break: keep-all;
+`
+
+const MetaRow = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: ${props => props.theme.colors.tertiaryText};
-  font-size: 28px;
-  font-weight: bold;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
 `
 
-const PostContent = styled.div`
-  flex: 1;
-  min-width: 0;
-`
-
-const Date = styled.p`
-  margin-bottom: 16px;
-  font-size: 14.4px;
-  color: ${props => props.theme.colors.tertiaryText};
-`
-
-const Excerpt = styled.p`
-  margin-bottom: 32px;
-  line-height: 1.7;
-  font-size: 16px;
-  color: ${props => props.theme.colors.secondaryText};
-  word-break: break-all;
+const ReadLink = styled(Link)`
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: ${props => props.theme.colors.accent};
+  font-family: ${props => props.theme.fonts.ui};
 `
 
 const checkIsScrollAtBottom = () => {
@@ -90,25 +87,7 @@ const checkIsScrollAtBottom = () => {
   )
 }
 
-const extractFirstImage = html => {
-  if (!html) return null
-  const match = html.match(/<img[^>]+src=["']([^"']+)["']/i)
-  return match ? match[1] : null
-}
-
-const DEFAULT_THUMBNAIL = "/thumbnail.png"
-
-const normalizeThumbnail = thumbnail => {
-  if (!thumbnail) return null
-  if (/^https?:\/\//i.test(thumbnail)) return thumbnail
-
-  const normalized = thumbnail.startsWith("/")
-    ? thumbnail
-    : `/${thumbnail.replace(/^\.?\//, "")}`
-  return withPrefix(normalized)
-}
-
-const PostList = ({ postList }) => {
+const PostList = ({ postList, span }) => {
   const [postCount, setPostCount] = useState(10)
 
   const handleMoreLoad = _.throttle(() => {
@@ -130,39 +109,27 @@ const PostList = ({ postList }) => {
   }, [postList])
 
   return (
-    <PostListWrapper>
+    <PostListWrapper span={span}>
       {postList.slice(0, postCount).map((post, i) => {
-        const { title, description, date, tags, thumbnail } = post.frontmatter
-        const { excerpt, html } = post
-        const { slug, thumbnail: resolvedThumbnail } = post.fields
-        const fallbackThumbnail = extractFirstImage(html)
-        const thumbnailUrl = normalizeThumbnail(
-          resolvedThumbnail || thumbnail || fallbackThumbnail || DEFAULT_THUMBNAIL
-        )
-
+        const { title, description, tags } = post.frontmatter
+        const { excerpt } = post
+        const { slug } = post.fields
+        const meaning = description || excerpt
         return (
           <React.Fragment key={slug}>
-            <PostWrapper>
-              <ThumbnailLink to={slug} aria-label={`${title} 썸네일`}>
-                <ThumbnailImage src={thumbnailUrl} alt={`${title} 썸네일`} />
-              </ThumbnailLink>
-              <PostContent>
-                <TagList tagList={tags} />
-                <Title size="md">
-                  <Link to={slug}>{title}</Link>
-                </Title>
-                <Date>{date}</Date>
-                {description ? (
-                  <Excerpt>{description}</Excerpt>
-                ) : (
-                  <Excerpt>{excerpt}</Excerpt>
-                )}
-              </PostContent>
-            </PostWrapper>
+            <PostCard>
+              <CardHeader>
+                <WordBlock>
+                  <WordLink to={slug}>{title}</WordLink>
+                </WordBlock>
+              </CardHeader>
+              <Meaning>{meaning}</Meaning>
+              <MetaRow>
+                <TagList tagList={tags} compact />
+                <ReadLink to={slug}>자세히 보기</ReadLink>
+              </MetaRow>
+            </PostCard>
 
-            {postCount - 1 !== i && postList.length - 1 !== i && (
-              <Divider mt="48px" mb="32px" />
-            )}
           </React.Fragment>
         )
       })}

@@ -166,8 +166,10 @@ exports.createSchemaCustomization = ({ actions }) => {
     title: String!
     description: String
     tags: [String!]!
+    keywords: [String!]
     series: String
     thumbnail: String
+    thumbnailHanja: String
   }
   type MarkdownRemarkFields {
     slug: String

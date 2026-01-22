@@ -12,7 +12,16 @@ const Post = ({ data }) => {
   const post = data.markdownRemark
   const { seriesList, relatedPosts, recentPosts } = data
 
-  const { title, date, update, tags, series, thumbnail } = post.frontmatter
+  const {
+    title,
+    date,
+    update,
+    tags,
+    series,
+    thumbnail,
+    thumbnailHanja,
+    keywords,
+  } = post.frontmatter
   const { excerpt, html } = post
   const { readingTime, slug, thumbnail: resolvedThumbnail } = post.fields
   const extractFirstImage = htmlSource => {
@@ -52,6 +61,7 @@ const Post = ({ data }) => {
         description={excerpt}
         url={`${siteUrl}${slug}`}
         image={seoThumbnail}
+        keywords={keywords}
       />
       <Article>
         <Article.Header
@@ -64,7 +74,7 @@ const Post = ({ data }) => {
         {filteredSeries.length > 0 && (
           <Article.Series header={series} series={filteredSeries} />
         )}
-        <Article.Body html={post.html} />
+        <Article.Body html={post.html} thumbnailHanja={thumbnailHanja} />
         <Article.Footer
           postList={postList}
           listTitle={listTitle}
@@ -91,14 +101,16 @@ export const pageQuery = graphql`
       id
       excerpt(pruneLength: 200, truncate: true)
       html
-      frontmatter {
-        title
-        date(formatString: "MMMM DD, YYYY")
-        update(formatString: "MMMM DD, YYYY")
-        tags
-        series
-        thumbnail
-      }
+        frontmatter {
+          title
+          date(formatString: "MMMM DD, YYYY")
+          update(formatString: "MMMM DD, YYYY")
+          tags
+          series
+          thumbnail
+          thumbnailHanja
+          keywords
+        }
       fields {
         slug
         thumbnail
